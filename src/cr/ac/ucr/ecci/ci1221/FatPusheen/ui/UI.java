@@ -24,6 +24,7 @@ import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.tree.NodeImpl;
 import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.tree.Tree;
 import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.tree.TreeImpl;
 import cr.ac.ucr.ecci.ci1221.FatPusheen.util.sorting.InsertionSort;
+import cr.ac.ucr.ecci.ci1221.FatPusheen.util.sorting.MergeSort;
 import cr.ac.ucr.ecci.ci1221.FatPusheen.util.sorting.QuickSort;
 import cr.ac.ucr.ecci.ci1221.FatPusheen.util.sorting.SelectionSort;
 
@@ -293,13 +294,10 @@ public class UI {
 			break;
 
 		case 10:
-			int eleccion = Integer
-					.parseInt(
-							JOptionPane
-									.showInputDialog(null,
-											"Ingrese el tipo algoritmo de ordenamiento\n" + "1. Insertion Sort\n"
-													+ "2. Selection Sort\n" + "3. Quicksort\n" + "4. Resgresar\n",
-											"Dato", 1));
+			int eleccion = Integer.parseInt(JOptionPane.showInputDialog(null,
+					"Ingrese el tipo algoritmo de ordenamiento\n" + "1. Insertion Sort\n" + "2. Selection Sort\n"
+							+ "3. Quicksort\n" + "4. MergeSort enfoque TopBottom\n" + "5. MergeSort enfoque BottomTop|n" + "6. Resgresar\n",
+					"Dato", 1));
 			switch (eleccion) {
 
 			case 1:
@@ -318,7 +316,7 @@ public class UI {
 					isort.insertionSort(numerosi);
 					lista.clear();
 					x = 0;
-					while (x != numerosi.length - 1) {
+					while (x != numerosi.length) {
 						lista.add(numerosi[x]);
 						x++;
 					}
@@ -342,7 +340,7 @@ public class UI {
 					ssort.selectionSort(numeross);
 					lista.clear();
 					x = 0;
-					while (x != numeross.length - 1) {
+					while (x != numeross.length) {
 						lista.add(numeross[x]);
 						x++;
 					}
@@ -366,7 +364,7 @@ public class UI {
 					qsort.quickSort(numerosq, 0, lista.size() - 1);
 					lista.clear();
 					i = 0;
-					while (i != numerosq.length - 1) {
+					while (i != numerosq.length) {
 						lista.add(numerosq[i]);
 						i++;
 					}
@@ -375,6 +373,30 @@ public class UI {
 				break;
 
 			case 4:
+				if (lista.size() == 0) {
+					JOptionPane.showMessageDialog(null, "La lista esta vacia", "VACIA!", 0);
+					list(lista);
+				} else {
+					MergeSort msort = new MergeSort();
+					Iterator<Integer> iti = lista.iterator();
+					int[] numerosm = new int[lista.size()];
+					int x = 0;
+					while (iti.hasNext()) {
+						numerosm[x] = iti.next();
+						x++;
+					}
+					numerosm = msort.mergeSortTopBottom(numerosm);
+					lista.clear();
+					x = 0;
+					while (x != numerosm.length) {
+						lista.add(numerosm[x]);
+						x++;
+					}
+					list(lista);
+				}
+				break;
+
+			case 6:
 				list(lista);
 				break;
 

@@ -7,7 +7,7 @@ public class InsertionSort {
 		for (int i = 0; i < lista.length; i++) {
 			x = i;
 			int cambio = i;
-			while (x != 0) {
+			while (x != -1) {
 				if (lista[x] > lista[cambio]) {
 					swap(lista, cambio, x);
 					cambio = x;
@@ -17,7 +17,7 @@ public class InsertionSort {
 		}
 	}
 
-	public void swap(int[] lista, int i, int minimo) {
+	private void swap(int[] lista, int i, int minimo) {
 		int aux = lista[i];
 		lista[i] = lista[minimo];
 		lista[minimo] = aux;

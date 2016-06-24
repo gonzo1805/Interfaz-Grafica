@@ -17,7 +17,7 @@ public class SelectionSort {
 		}
 	}
 	
-	public void swap(int[] lista, int i, int minimo){
+	private void swap(int[] lista, int i, int minimo){
 		int aux = lista[i];
 		lista[i] = lista[minimo];
 		lista[minimo] = aux;

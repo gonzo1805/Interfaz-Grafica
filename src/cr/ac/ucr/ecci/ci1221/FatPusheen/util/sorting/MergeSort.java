@@ -31,10 +31,10 @@ public class MergeSort {
 		izquierda = separador(izquierda);
 		derecha = separador(derecha);
 
-		return merge(izquierda, derecha);
+		return mergeTB(izquierda, derecha);
 	}
 
-	private int[] merge(int[] lista, int[] lista2) {
+	private int[] mergeTB(int[] lista, int[] lista2) {
 
 		SelectionSort sort = new SelectionSort();
 		int[] listaRet = new int[lista.length + lista2.length];
@@ -58,6 +58,54 @@ public class MergeSort {
 		sort.selectionSort(listaRet);
 		return listaRet;
 
+	}
+
+	public int[] mergeSortBottomTop(int[] lista) {
+		int tamano = lista.length;
+		for (int x = 2; x < lista.length; x = x * 2) {
+			int posicionI = 0;
+			tamano = tamano / 2;
+			for (int i = 0; i <= tamano; i++) {
+
+				lista = mergeBT(lista, posicionI, posicionI + x - 1);
+				// i = i + x;
+				posicionI = posicionI + x;
+
+			}
+		}
+		lista = mergeBT(lista, 0, lista.length);
+		return lista;
+	}
+
+	private int[] mergeBT(int[] lista, int min, int max) {
+		if (max - min < 1) {
+			return lista;
+		}
+		if (max > lista.length) {
+			max = lista.length - 1;
+		}
+		int x;
+		for (int i = min; i <= max; i++) {
+			if (lista.length == i) {
+				break;
+			}
+			x = i;
+			int cambio = i;
+			while (x != min - 1) {
+				if (lista[x] > lista[cambio]) {
+					swap(lista, cambio, x);
+					cambio = x;
+				}
+				x--;
+			}
+		}
+		return lista;
+	}
+
+	private void swap(int[] lista, int i, int minimo) {
+		int aux = lista[i];
+		lista[i] = lista[minimo];
+		lista[minimo] = aux;
 	}
 
 }

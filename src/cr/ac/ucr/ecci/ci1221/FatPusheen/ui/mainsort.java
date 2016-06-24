@@ -7,25 +7,35 @@ import cr.ac.ucr.ecci.ci1221.FatPusheen.util.sorting.SelectionSort;
 public class mainsort {
 
 	public static void main(String args[]) {
-		MergeSort sort = new MergeSort();
+		/*MergeSort sort = new MergeSort();
 		int[] lista = { 1, 5, 7, 2, 4, 6, 8, 0, 10, 9 };
 		lista = sort.mergeSortTopBottom(lista);
 		for (int i = 0; i < lista.length; i++) {
 			System.out.print(lista[i] + " ");
-		}
+		}*/
+		
 		System.out.println("\n");
+		MergeSort sort4 = new MergeSort();
+		int[] lista4 = { 1, 5, 7, 2, 4, 6, 8, 0, 10, 9, 3 };
+		lista4 = sort4.mergeSortBottomTop(lista4);
+		for (int i = 0; i < lista4.length; i++) {
+			System.out.print(lista4[i] + " ");
+		}
+		
+		/*System.out.println("\n");
 		InsertionSort sort2 = new InsertionSort();
 		int[] lista2 = { 1, 5, 7, 2, 4, 6, 8, 0, 10, 9 };
 		sort2.insertionSort(lista2);
 		for (int i = 0; i < lista2.length; i++) {
 			System.out.print(lista2[i] + " ");
 		}
+		
 		System.out.println("\n");
 		SelectionSort sort3 = new SelectionSort();
 		int[] lista3 = { 1, 5, 7, 2, 4, 6, 8, 0, 10, 9 };
 		sort3.selectionSort(lista3);
 		for (int i = 0; i < lista3.length; i++) {
 			System.out.print(lista3[i] + " ");
-		}
+		}*/
 	}
 }

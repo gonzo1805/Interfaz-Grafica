@@ -15,7 +15,7 @@ public class QueueCircularArray<E> implements Queue<E> {
 	private int cantidadDatos;
 
 	public QueueCircularArray() {
-		elements = (E[]) new Object[1000];
+		elements = (E[]) new Object[50];
 		write = 0;
 		read = 0;
 		cantidadDatos = 0;
@@ -139,7 +139,7 @@ public class QueueCircularArray<E> implements Queue<E> {
 
 	@Override
 	public void clear() {
-		elements = (E[]) new Object[1000];
+		elements = (E[]) new Object[50];
 		cantidadDatos = 0;
 		write = 0;
 		read = 0;
@@ -162,7 +162,7 @@ public class QueueCircularArray<E> implements Queue<E> {
 
 		@Override
 		public boolean hasNext() {
-			return (actual < write-1);
+			return (actual < write);
 		}
 
 		@Override
@@ -172,7 +172,7 @@ public class QueueCircularArray<E> implements Queue<E> {
 				actual = write;
 				return aux;
 			}
-			actual = (actual + 1) % cantidadDatos;
+			actual = (actual + 1) % elements.length;
 			return aux;
 		}
 	}

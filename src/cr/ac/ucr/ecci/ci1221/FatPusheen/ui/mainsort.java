@@ -1,5 +1,11 @@
 package cr.ac.ucr.ecci.ci1221.FatPusheen.ui;
 
+
+
+import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.Iterator;
+import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.list.ArrayList;
+import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.list.LinkedList;
+import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.list.List;
 import cr.ac.ucr.ecci.ci1221.FatPusheen.util.sorting.InsertionSort;
 import cr.ac.ucr.ecci.ci1221.FatPusheen.util.sorting.MergeSort;
 import cr.ac.ucr.ecci.ci1221.FatPusheen.util.sorting.SelectionSort;
@@ -15,11 +21,23 @@ public class mainsort {
 		}*/
 		
 		System.out.println("\n");
-		MergeSort sort4 = new MergeSort();
-		int[] lista4 = { 1, 5, 7, 2, 4, 6, 8, 0, 10, 9, 3 };
-		lista4 = sort4.mergeSortBottomTop(lista4);
-		for (int i = 0; i < lista4.length; i++) {
-			System.out.print(lista4[i] + " ");
+		MergeSort<Integer> sort4 = new MergeSort<Integer>();
+		List<Integer> lista4 = new ArrayList<Integer>();
+		lista4.add(8);
+		lista4.add(7);
+		lista4.add(3);
+		lista4.add(2);
+		lista4.add(5);
+		lista4.add(7);
+		lista4.add(11);
+		lista4.add(1);
+		lista4.add(12);
+		lista4.add(6);
+		lista4.add(4);
+		sort4.mergeSortBottomTop(lista4);
+		Iterator<Integer> it = lista4.iterator();
+		while (it.hasNext()){
+			System.out.print(it.next() + " ");
 		}
 		
 		/*System.out.println("\n");

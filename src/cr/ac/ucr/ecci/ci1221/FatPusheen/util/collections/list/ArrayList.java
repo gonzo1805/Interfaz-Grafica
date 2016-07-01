@@ -14,7 +14,7 @@ public class ArrayList<E> implements List<E> {
 	private E[] lista;
 
 	public ArrayList() {
-		lista = (E[]) new Object[1000];
+		lista = (E[]) new Object[50];
 		cantidadDatos = 0;
 	}
 
@@ -33,6 +33,16 @@ public class ArrayList<E> implements List<E> {
 	 */
 	@Override
 	public void add(E element, int position) {
+		position = position - 1;
+		if (position == cantidadDatos){
+			add(element);
+			return;
+		}
+		if (cantidadDatos == 0){
+			lista[0] = element;
+			cantidadDatos++;
+			return;
+		}
 		if (position > cantidadDatos) {
 			position = cantidadDatos + 1;
 		}
@@ -49,14 +59,13 @@ public class ArrayList<E> implements List<E> {
 			lista[cantidadDatos] = aux;
 
 		} else if (cantidadDatos + 1 < lista.length) {
-			E aux = lista[position - 1];
-			for (int i = position - 1; i < cantidadDatos; i++) {
-				lista[i + 1] = aux;
-				aux = lista[i + 2];
+			E aux = lista[cantidadDatos-1];
+			for (int i = cantidadDatos; i > position; i--) {
+				lista[i] = lista[i-1];
 			}
-			lista[position - 1] = element;
+			lista[position] = element;
 			cantidadDatos++;
-			lista[cantidadDatos] = aux;
+			
 
 		}
 
@@ -80,6 +89,7 @@ public class ArrayList<E> implements List<E> {
 	 */
 	@Override
 	public void remove(int position) {
+		position = position - 1;
 		if (position == 0) {
 			for (int i = 0; i < cantidadDatos; i++) {
 				lista[i] = lista[i + 1];
@@ -101,8 +111,8 @@ public class ArrayList<E> implements List<E> {
 	 */
 	@Override
 	public int find(E element) {
-		for (int i = 0; i < cantidadDatos; i++) {
-			if (lista[i] == element) {
+		for (int i = 1; i <= cantidadDatos; i++) {
+			if (lista[i-1] == element) {
 				return i;
 			}
 		}
@@ -119,6 +129,7 @@ public class ArrayList<E> implements List<E> {
 	 */
 	@Override
 	public E get(int position) {
+		position = position - 1;
 		return lista[position];
 	}
 
@@ -133,6 +144,7 @@ public class ArrayList<E> implements List<E> {
 	 */
 	@Override
 	public E set(int position, E element) {
+		position = position - 1;
 		if (position > cantidadDatos) {
 			System.out.println("Se intenta sobreescribir en una posicion que la lista no posee, se retornara null");
 			return null;
@@ -150,7 +162,11 @@ public class ArrayList<E> implements List<E> {
 	 */
 	@Override
 	public void add(E element) {
-		add(element, cantidadDatos + 1);
+		if (lista.length < cantidadDatos + 1){
+			aumentaTamaño();
+		}
+		lista[cantidadDatos] = element;
+		cantidadDatos++;
 	}
 
 	/**

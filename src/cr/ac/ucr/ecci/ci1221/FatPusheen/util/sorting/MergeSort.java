@@ -1,111 +1,57 @@
 package cr.ac.ucr.ecci.ci1221.FatPusheen.util.sorting;
 
-public class MergeSort {
+import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.list.List;
 
-	public int[] mergeSortTopBottom(int[] lista) {
-		return separador(lista);
+public class MergeSort<T extends Comparable<T>> {
+
+	private T[] auxT;
+
+	@SuppressWarnings("unchecked")
+	public void mergeSortTopBottom(List<T> lista) {
+		auxT = (T[]) new Comparable[lista.size()];
+		separador(lista, 1, lista.size());
 	}
 
-	private int[] separador(int[] lista) {
-		if (lista.length / 2 < 1) {
-			return lista;
+	private void separador(List<T> lista, int inicio, int ultimo) {
+
+		if (ultimo <= inicio) {
+			return;
 		}
+		int mitad = (ultimo - inicio) / 2 + inicio;
+		separador(lista, inicio, mitad);
+		separador(lista, mitad + 1, ultimo);
+		merge(lista, inicio, mitad, ultimo);
 
-		int mitad = lista.length / 2;
-		int[] izquierda = new int[mitad];
-		int[] derecha = new int[lista.length - mitad];
+	}
 
-		int indiceIz = 0;
-		int indiceDe = 0;
+	private void merge(List<T> lista, int inicio, int mitad, int ultimo) {
+		int i = inicio;
+		int b = mitad + 1;
 
-		for (int i = 0; i < lista.length; i++) {
-			if (i < mitad) {
-				izquierda[indiceIz] = lista[i];
-				indiceIz++;
+		for (int x = inicio; x <= lista.size(); x++) {
+			auxT[x - 1] = lista.get(x);
+		}
+		for (int y = inicio; y <= ultimo; y++) {
+			if (i > mitad) {
+				lista.set(y, auxT[b++ - 1]);
+			} else if (b > ultimo) {
+				lista.set(y, auxT[i++ - 1]);
+			} else if (auxT[b - 1].compareTo(auxT[i - 1]) < 0) {
+				lista.set(y, auxT[b++ - 1]);
 			} else {
-				derecha[indiceDe] = lista[i];
-				indiceDe++;
+				lista.set(y, auxT[i++ - 1]);
 			}
 		}
-
-		izquierda = separador(izquierda);
-		derecha = separador(derecha);
-
-		return mergeTB(izquierda, derecha);
 	}
 
-	private int[] mergeTB(int[] lista, int[] lista2) {
-
-		SelectionSort sort = new SelectionSort();
-		int[] listaRet = new int[lista.length + lista2.length];
-
-		int tamano1 = 0;
-		int tamano2 = 0;
-
-		int x = 0;
-
-		while (tamano1 != lista.length) {
-			listaRet[x] = lista[tamano1];
-			x++;
-			tamano1++;
-		}
-		while (tamano2 != lista2.length) {
-			listaRet[x] = lista2[tamano2];
-			x++;
-			tamano2++;
-		}
-
-		sort.selectionSort(listaRet);
-		return listaRet;
-
-	}
-
-	public int[] mergeSortBottomTop(int[] lista) {
-		int tamano = lista.length;
-		for (int x = 2; x < lista.length; x = x * 2) {
-			int posicionI = 0;
-			tamano = tamano / 2;
-			for (int i = 0; i <= tamano; i++) {
-
-				lista = mergeBT(lista, posicionI, posicionI + x - 1);
-				// i = i + x;
-				posicionI = posicionI + x;
-
+	@SuppressWarnings("unchecked")
+	public void mergeSortBottomTop(List<T> lista) {
+		int tamano = lista.size();
+		auxT = (T[]) new Comparable[tamano];
+		for (int i = 1; i < tamano; i = i + i) {
+			for (int z = 0; z < tamano - i; z += i + i) {
+				merge(lista, z + 1, z + i, Math.min(z + i + i, tamano));
 			}
 		}
-		lista = mergeBT(lista, 0, lista.length);
-		return lista;
 	}
-
-	private int[] mergeBT(int[] lista, int min, int max) {
-		if (max - min < 1) {
-			return lista;
-		}
-		if (max > lista.length) {
-			max = lista.length - 1;
-		}
-		int x;
-		for (int i = min; i <= max; i++) {
-			if (lista.length == i) {
-				break;
-			}
-			x = i;
-			int cambio = i;
-			while (x != min - 1) {
-				if (lista[x] > lista[cambio]) {
-					swap(lista, cambio, x);
-					cambio = x;
-				}
-				x--;
-			}
-		}
-		return lista;
-	}
-
-	private void swap(int[] lista, int i, int minimo) {
-		int aux = lista[i];
-		lista[i] = lista[minimo];
-		lista[minimo] = aux;
-	}
-
 }

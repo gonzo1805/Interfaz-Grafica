@@ -1,27 +1,28 @@
 package cr.ac.ucr.ecci.ci1221.FatPusheen.util.sorting;
 
-public class SelectionSort {
+import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.list.List;
 
-	public void selectionSort(int[] lista){
-		for (int i=0; i<lista.length; i++){
+public class SelectionSort<T extends Comparable<T>> {
+
+	public void selectionSort(List<T> lista) {
+		for (int i = 1; i <= lista.size(); i++) {
 			int minimo = i;
-			
-			for (int x=i+1; x<lista.length; x++){
-				if (lista[x] < lista[minimo]){
+
+			for (int x = i + 1; x <= lista.size(); x++) {
+				if (lista.get(x).compareTo(lista.get(minimo)) < 0) {
 					minimo = x;
 				}
 			}
-			if (i != minimo){
+			if (i != minimo) {
 				swap(lista, i, minimo);
 			}
 		}
 	}
-	
-	private void swap(int[] lista, int i, int minimo){
-		int aux = lista[i];
-		lista[i] = lista[minimo];
-		lista[minimo] = aux;
+
+	private void swap(List<T> lista, int i, int minimo) {
+		T aux = lista.get(i);
+		lista.set(i, lista.get(minimo));
+		lista.set(minimo, aux);
 	}
-	
-	
+
 }

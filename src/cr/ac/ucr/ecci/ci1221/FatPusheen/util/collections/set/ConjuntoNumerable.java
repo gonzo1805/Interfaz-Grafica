@@ -91,6 +91,13 @@ public interface ConjuntoNumerable<T extends Enumerable> extends Iterable<T> {
 	 * @return un boolean si el conjunto asignado al this esta vacio
 	 */
 	boolean isEmpty();
+	
+	/**
+	 * Retorna el tamaño del conjunto
+	 * 
+	 * @return el tamaño del conjunto
+	 */
+	int size();
 
 	
 }

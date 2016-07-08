@@ -13,7 +13,7 @@ public class BitsVectorSetImpl<T extends Enumerable> implements ConjuntoNumerabl
 	 * Contructor de tamaño standart
 	 */
 	public BitsVectorSetImpl() {
-		lista = (T[]) new Enumerable[1000];
+		lista = (T[]) new Enumerable[50];
 	}
 
 	/**
@@ -248,6 +248,16 @@ public class BitsVectorSetImpl<T extends Enumerable> implements ConjuntoNumerabl
 	@Override
 	public Iterator<T> iterator() {
 		return new It<T>();
+	}
+	
+	/**
+	 * Retorna el tamaño de la lista
+	 * 
+	 * @return el tamaño de la lista
+	 */
+	@Override
+	public int size(){
+		return this.lista.length;
 	}
 
 	/**

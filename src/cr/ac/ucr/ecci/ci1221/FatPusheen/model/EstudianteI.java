@@ -4,27 +4,37 @@ import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.set.Enumerable;
 
 public interface EstudianteI extends Comparable, Enumerable {
 
-
+	/**
+	 * Get de index
+	 */
 	@Override
-	public int getIndex(); 
+	public int getIndex();
 
-	public void setIndex(int index); 
+	/**
+	 * Set de index
+	 */
+	public void setIndex(int index);
 
-	public int getEdad(); 
+	/**
+	 * Get de nombre
+	 */
+	public String getNombre();
 
-	public void setEdad(int edad);
+	/**
+	 * Set de nombre
+	 */
+	public void setNombre(String Nombre);
 
-	public String getCarne();
-
-	public void setCarne(String carne);
-
-	public int getCedula();
-
-	public void setCedula(int cedula);
-
+	/**
+	 * Hash code de estudiante, denotado por su index
+	 */
 	@Override
 	public int hashCode();
 
+	/**
+	 * CompareTo de Estudiante, retorna -1 si this es mayor a comparacion 0 si
+	 * son iguales y 1 si comparacion es mayor a this
+	 */
 	@Override
 	public int compareTo(Object comparacion);
 }

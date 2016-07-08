@@ -295,6 +295,22 @@ public class HashTableSetImpl<T> implements Conjunto<T> {
 		return (!itThis.hasNext());// Si el primer hasNext del iterador es null
 									// es porque esta vacia
 	}
+	
+	/**
+	 * Retorna el tamaño del conjunto
+	 * 
+	 * @return el tamaño del conjunto
+	 */
+	@Override
+	public int size(){
+		int tamano = 0;
+		for (int i = 0; i<this.lista.length; i++){
+			if (lista[i] != null){
+				tamano = tamano + lista[i].size();
+			}
+		}
+		return tamano;
+	}
 
 	/**
 	 * Instanciador del iterador

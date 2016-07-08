@@ -7,7 +7,7 @@ import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.Iterator;
 import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.stack.Stack;
 import cr.ac.ucr.ecci.ci1221.FatPusheen.util.collections.stack.StackArray;
 
-public class AVLTree<T extends Comparable<T>> implements Conjunto<T> {
+public class AVLTree<T extends Comparable> implements Conjunto<T> {
 
 	/**
 	 * Atributo donde estara guardado la raiz del arbol binario de busqueda
@@ -172,13 +172,17 @@ public class AVLTree<T extends Comparable<T>> implements Conjunto<T> {
 	 * @return un boolean si el dato esta o no en la lista
 	 */
 	private boolean contains(Nodo<T> nodo, T dato) {
+		if (nodo == null) {
+			return false;
+		}
+
 		if (nodo.dato.equals(dato)) {// Si lo encontro
 			return true;// Retorna true
 		} else {
-			if (nodo.hijoIzquierdo != null) {// Si tiene hijo izquierdo
+			if (nodo.dato.compareTo(dato) > 0) {// Si nodo es mayor que dato
 				return contains(nodo.hijoIzquierdo, dato);// Recursividad por
 															// ahi
-			} else if (nodo.hijoDerecho != null) {// Si tiene hijo derecho
+			} else if (nodo.dato.compareTo(dato) < 0) {// Si nodo es menor
 				return contains(nodo.hijoDerecho, dato);// Recursividad por ahi
 			}
 		}
@@ -193,112 +197,249 @@ public class AVLTree<T extends Comparable<T>> implements Conjunto<T> {
 		raiz = null;// Borra todo
 	}
 
-	private void balanceo(Nodo<T> bal, int factor) {
-		if (factor == -2 && bal.hijoDerecho.hijoIzquierdo == null) {
-			if (bal.padre.hijoDerecho == bal) {
-				bal.hijoDerecho.padre = bal.padre;
-				bal.padre.hijoDerecho = bal.hijoDerecho;
-				bal.padre = bal.hijoDerecho;
-				bal.hijoDerecho.hijoIzquierdo = bal;
-				bal.hijoDerecho = null;
-				bal.altura = 1;
-				acomodaAlturaPost(bal.padre.padre);
-
-			} else {
-
-			}
-		}
-		if (factor == 2 && bal.hijoIzquierdo.hijoDerecho == null) {
-			if (bal.padre.hijoIzquierdo == bal) {
-				bal.hijoIzquierdo.padre = bal.padre;
-				bal.padre.hijoIzquierdo = bal.hijoIzquierdo;
-				bal.padre = bal.hijoIzquierdo;
-				bal.hijoIzquierdo.hijoDerecho = bal;
-				bal.hijoIzquierdo = null;
-				bal.altura = 1;
-				acomodaAlturaPost(bal.padre.padre);
+	/**
+	 * Rotacion a la izquierda del arbol
+	 * 
+	 * @param bal
+	 *            el nodo donde esta el desbalanceo
+	 */
+	private void rotacionRR(Nodo<T> bal) {
+		// Si el dato desbalanceado es la raiz
+		if (bal.dato == raiz.dato) {
+			Nodo<T> aux;// Auxiliar
+			bal.hijoDerecho.padre = null;// Le quitamos el padre al hijo derecho
+											// de la raiz
+			raiz = bal.hijoDerecho;// La nueva raiz es el hijo derecho
+			bal.padre = bal.hijoDerecho;// El padre de la vieja raiz es la nueva
+										// raiz
+			aux = bal.hijoDerecho.hijoIzquierdo;// Auxiliar de los hijos
+												// izquierdos de la nueva raiz
+			bal.hijoDerecho.hijoIzquierdo = bal;// Asignamos la vieja raiz como
+												// hijo izquierdo de la nueva
+			bal.hijoDerecho = aux;// Insertamos los hijos de la nueva raiz como
+									// hijos de la vieja
+			aux.padre = bal;// Otro puntero
 		} else {
+			Nodo<T> aux;// Auxiliar
+			bal.hijoDerecho.padre = bal.padre;// Asignamos como padre del hijo
+												// derecho al padre del
+												// desbalanceado
+			bal.padre.hijoDerecho = bal.hijoDerecho;// Lo mismo que el anterior
+													// pero con el otro puntero
+			bal.padre = bal.hijoDerecho;// Asignamos como padre del
+										// desbalanceado a si hijo derecho
+			aux = bal.hijoDerecho.hijoIzquierdo;// Auxiliar de los hijos del
+												// hijo del desbalanceado
+			bal.hijoDerecho.hijoIzquierdo = bal;// Insertamos el desbalanceado
+												// como hijo de su nuevo padre
+			bal.hijoDerecho = aux;// Insertamos los hijos
+			aux.padre = bal;// Otro puntero
+		}
+	}
 
+	/**
+	 * Rotacion derecha del arbol
+	 * 
+	 * @param bal
+	 *            nodo desbalanceado
+	 */
+	private void rotacionLL(Nodo<T> bal) {
+		// Si el nodo es la raiz
+		if (bal.dato == raiz.dato) {
+			Nodo<T> aux;// Auxiliar
+			bal.hijoIzquierdo.padre = null;// Quitamos el padre del hijo
+											// izquierdo de la raiz
+			raiz = bal.hijoIzquierdo;// La nueva raiz es el hijo izquierdo
+			bal.padre = bal.hijoIzquierdo;// La antigua raiz pasa como hijo
+											// izquierdo de la nueva
+			aux = bal.hijoIzquierdo.hijoDerecho;// Auxiliar de los hijos de la
+												// nueva raiz
+			bal.hijoIzquierdo.hijoDerecho = bal;// Insertamos el segundo puntero
+												// de la antigua raiz
+			bal.hijoIzquierdo = aux;// Insertamos los hijos
+			aux.padre = bal;// Otro puntero
+		} else {
+			Nodo<T> aux;// Auxiliar
+			bal.hijoIzquierdo.padre = bal.padre;// Cambiamos el padre del hijo
+												// izquierdo del desbalanceado
+												// como el padre del
+												// desbalanceado
+			bal.padre.hijoIzquierdo = bal.hijoIzquierdo;// Cambio de punteros de
+														// lo anterior
+			bal.padre = bal.hijoIzquierdo;// El padre del desbalanceado es su
+											// hijo izquierdo
+			aux = bal.hijoIzquierdo.hijoDerecho;// Auxiliar de los hijos
+			bal.hijoIzquierdo.hijoDerecho = bal;// Insertamos el desbalanceado
+			bal.hijoIzquierdo = aux;// Insetamos los hijos
+			aux.padre = bal;// Otro puntero
+		}
+	}
+
+	/**
+	 * Rotacion doble del arbol derecha izquierda
+	 * 
+	 * @param bal
+	 *            nodo desbalanceado
+	 */
+	private void rotacionRL(Nodo<T> bal) {
+		rotacionLL(bal);// Una rotacion derecho
+		rotacionRR(bal);// Una rotacion izquierda
+	}
+
+	/**
+	 * Rotacion doble del arbol izquierda derecha
+	 * 
+	 * @param bal
+	 *            nodo desbalanceado
+	 */
+	private void rotacionLR(Nodo<T> bal) {
+		rotacionRR(bal);// Una rotacion izquierda
+		rotacionLL(bal);// Una rotacion derecha
+	}
+
+	/**
+	 * Metodo que realiza el balanceo del arbol
+	 * 
+	 * @param bal
+	 *            nodo a balancear
+	 * @param factor
+	 *            factor de balanceo del nodo desbalanceado
+	 * @param dato
+	 *            si es una rotacion doble o simple
+	 */
+	private void balanceo(Nodo<T> bal, int factor, int dato) {
+		if (factor == -2) {// Si es balanceo izquierdo
+			if (dato == 1) {// Simple
+				rotacionRR(bal);
+			} else if (dato == 0) {// Doble
+				rotacionLR(bal);
+			}
+		} else if (factor == 2) {// Si es balanceo derecho
+			if (dato == 0) {// Simple
+				rotacionLL(bal);
+			} else if (dato == 1) {// Doble
+				rotacionRL(bal);
 			}
 		}
 	}
 
-	private void acomodaAlturaPost(Nodo<T> nodo) {
-		if (nodo != null) {
-			int alto;
-			if (nodo.hijoDerecho == null) {
-				alto = 0;
-			} else {
-				alto = nodo.hijoDerecho.altura;
-			}
-			if (nodo.hijoIzquierdo != null) {
-				if (alto < nodo.hijoIzquierdo.altura) {
-					alto = nodo.hijoIzquierdo.altura;
-				}
-			}
-			nodo.altura = alto + 1;
-		}
-	}
-
+	/**
+	 * Metodo que dice que nodo esta desbalanceado empezando la busqueda desde
+	 * un nodo en especial moviendose por sus padres que son los unicos
+	 * candidatos a estar desbalanceados. Metodo recursivo
+	 * 
+	 * @param nodo
+	 *            nodo que se inserto previamente a este metodo
+	 * @return El nodo desbalanceado
+	 */
 	private Nodo<T> necesitaBal(Nodo<T> nodo) {
-		int factor = 0;
+		int factor = 0;// Inicializacion del factor y valor que toma factor si
+						// ambos hijos son null
+		// Si hijo derecho es null e izquierdo no
 		if (nodo.hijoDerecho == null && nodo.hijoIzquierdo != null) {
-			factor = (nodo.hijoIzquierdo.altura - 0);
-		} else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo == null) {
-			factor = (0 - nodo.hijoDerecho.altura);
-		} else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo != null) {
-			factor = nodo.hijoIzquierdo.altura - nodo.hijoDerecho.altura;
+			// Factor es altura de izquierda menos 0
+			factor = (sacaAltura(nodo.hijoIzquierdo) - 0);
 		}
+		// Si hijo derecho no es null pero izquierdo si
+		else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo == null) {
+			// Factor es 0 menos altura del derecho
+			factor = (0 - sacaAltura(nodo.hijoDerecho));
+		}
+		// Si ninguno null
+		else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo != null) {
+			// Factor es altura izquierdo menos altura derecho
+			factor = sacaAltura(nodo.hijoIzquierdo) - sacaAltura(nodo.hijoDerecho);
+		}
+		// Si estamos en la raiz y no se encontro un desbalanceo
 		if (nodo.padre == null && (factor == 1 || factor == 0 || factor == -1)) {
-			return null;
+			return null;// Retorna null
 		} else if (factor > 1 || factor < -1) {
-			return nodo;
+			return nodo;// Si no retorna el nodo desbalanceado
 		}
+		// Si ninguna de las anteriores entonces retorna el mismo con el padre
+		// del nodo revisado
 		return necesitaBal(nodo.padre);
 	}
 
-	private void acomodaAltura(Nodo<T> nodo) {
-
-		// if (nodo.padre != null) {
-		if (nodo.padre.altura == 1) {
-			altura(nodo.padre);
-		} else if (nodo.padre.altura > 1) {
-			nodo.altura = nodo.padre.altura - 1;
-		}
-		// acomodaAltura(nodo.padre);
-		// } else if (nodo.padre == null) {
-		int alto;
-		if (raiz.hijoDerecho == null) {
-			alto = 0;
-		} else {
-			alto = raiz.hijoDerecho.altura;
-		}
-		if (raiz.hijoIzquierdo != null) {
-			if (alto < raiz.hijoIzquierdo.altura) {
-				alto = raiz.hijoIzquierdo.altura;
-			}
-		}
-		raiz.altura = alto + 1;
-		// }
-	}
-
+	/**
+	 * Metodo que saca el factor de balanceo del nodo enviado por parametro
+	 * 
+	 * @param nodo
+	 *            El nodo que se quiere saber el factor de balanceo
+	 * @return El factor de balanceo
+	 */
 	private int factor(Nodo<T> nodo) {
-		int factor = 0;
+		int factor = 0;// Inicializacion del factor y valor que toma si ambos
+						// hijos son null
+		// Si hijo derecho es null e izquierdo no
 		if (nodo.hijoDerecho == null && nodo.hijoIzquierdo != null) {
-			factor = (nodo.hijoIzquierdo.altura - 0);
-		} else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo == null) {
-			factor = (0 - nodo.hijoDerecho.altura);
-		} else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo != null) {
-			factor = nodo.hijoIzquierdo.altura - nodo.hijoDerecho.altura;
+			// Factor es altura de izquierda menos 0
+			factor = (sacaAltura(nodo.hijoIzquierdo) - 0);
 		}
-		return factor;
+		// Si hijo derecho no es null pero izquierdo si
+		else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo == null) {
+			// Factor es 0 menos altura del derecho
+			factor = (0 - sacaAltura(nodo.hijoDerecho));
+		}
+		// Si ninguno null
+		else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo != null) {
+			// Factor es altura izquierdo menos altura derecho
+			factor = sacaAltura(nodo.hijoIzquierdo) - sacaAltura(nodo.hijoDerecho);
+		}
+		return factor;// Retorna el factor
 	}
 
-	private void altura(Nodo<T> nodo) {
-		if (nodo != null) {
-			nodo.altura++;
-			altura(nodo.padre);
+	/**
+	 * Saca la altura del nodo dado
+	 * 
+	 * @param sacar
+	 *            el nodo a saber su altura
+	 * @return la altura del nodo dado
+	 */
+	private int sacaAltura(Nodo<T> sacar) {
+		return sacaAltura(sacar, 1, 1);
+	}
+
+	/**
+	 * Saca la altura del nodo dado
+	 * 
+	 * @param sacar
+	 *            el nodo a saber la altura
+	 * @param altura
+	 *            la altura actual en la recursividad
+	 * @param maxima
+	 *            la altura maxima encontrada
+	 * @return
+	 */
+	private int sacaAltura(Nodo<T> sacar, int altura, int maxima) {
+
+		// Si la altura que tenemos es mayor a la maxima
+		if (altura > maxima) {
+			// Sustituimos la maxima
+			maxima = altura;
 		}
+
+		// Si no tiene hijos
+		if (sacar.hijoDerecho == null && sacar.hijoIzquierdo == null) {
+			return maxima;// Retorna la maxima
+		}
+
+		// Si tiene hijo izquierdo
+		if (sacar.hijoIzquierdo != null) {
+			altura++;// Aumenta altura
+			// La maxima sera lo que sustituya la recursividad
+			maxima = sacaAltura(sacar.hijoIzquierdo, altura, maxima);
+			altura--;// Reduce la altura
+		}
+		// Si tiene hijo derecho
+		if (sacar.hijoDerecho != null) {
+			altura++;// Aumenta altura
+			// La maxima sero lo que sustituya la recursividad
+			maxima = sacaAltura(sacar.hijoDerecho, altura, maxima);
+			altura--;// Reduce la altura
+		}
+
+		return maxima;// Retorna la maxima
 	}
 
 	/**
@@ -343,16 +484,18 @@ public class AVLTree<T extends Comparable<T>> implements Conjunto<T> {
 					este.hijoDerecho = dato;// Inserta
 					dato.padre = este;
 					insercion = true;// Insercion se hizo
-					boolean comp = true;
-					while (comp) {
-						acomodaAltura(dato);
-						Nodo<T> bal = necesitaBal(dato);
+					boolean comp = true;// Boolean para el balanceo
+					while (comp) {// Mientras no este balanceado
+						Nodo<T> bal = necesitaBal(dato);// Vemos si necesita
+														// balanceo
 
-						if (bal != null) {
-							balanceo(bal, factor(bal));
-							// acomodaAltura(bal);
-						} else if (bal == null) {
-							comp = false;
+						if (bal != null) {// Si lo necesita
+							// Balancea
+							balanceo(bal, factor(bal), 1);
+							dato = bal;// Repetimos pero esta vez escalando en
+										// el arbol
+						} else if (bal == null) {// Si no necesita
+							comp = false;// Sale del while
 						}
 					}
 
@@ -368,16 +511,18 @@ public class AVLTree<T extends Comparable<T>> implements Conjunto<T> {
 					este.hijoIzquierdo = dato;// Inserta
 					dato.padre = este;
 					insercion = true;// Se hizo insercion
-					boolean comp = true;
-					while (comp) {
-						acomodaAltura(dato);
+					boolean comp = true;// Boolean para el balanceo
+					while (comp) {// Mientras este desbalanceado
+						// Vemos si necesita balanceo
 						Nodo<T> bal = necesitaBal(dato);
 
-						if (bal != null) {
-							balanceo(bal, factor(bal));
-							// acomodaAltura(bal);
-						} else if (bal == null) {
-							comp = false;
+						if (bal != null) {// Si necesita
+							// Balancea
+							balanceo(bal, factor(bal), 0);
+							// Repetimos
+							dato = bal;
+						} else if (bal == null) {// Si no necesita
+							comp = false;// Termina el while
 						}
 					}
 
@@ -409,20 +554,94 @@ public class AVLTree<T extends Comparable<T>> implements Conjunto<T> {
 
 		nodo = localizaNodo(dato, raiz, nodo);// Localiza el nodo
 
+		Nodo<T> padreNodo = nodo.padre;
+
+		// Caso sin hijos
 		if (nodo.hijoDerecho == null && nodo.hijoIzquierdo == null) {// Si hoja
 			nodo = null;// Borra
+			int posicion = 0;
+			if (padreNodo != null) {
+				if (padreNodo.hijoDerecho.equals(nodo)) {
+					padreNodo.hijoDerecho = null;
+					posicion = 0;
+				} else {
+					padreNodo.hijoIzquierdo = null;
+					posicion = 1;
+				}
+			}
 
-		} else if (nodo.hijoDerecho == null && nodo.hijoIzquierdo != null) {// Si
+			// Balanceo
+			boolean comp = true;
+			while (comp) {
+				Nodo<T> bal;
+				if (padreNodo == null) {
+					bal = null;
+				} else {
+					bal = necesitaBal(padreNodo);
+				}
+				if (bal != null) {
+					balanceo(bal, factor(bal), posicion);
+					padreNodo = bal;
+				} else if (bal == null) {
+					comp = false;
+				}
+			}
+
+		}
+		// Caso solo hijo izquierdo existe
+		else if (nodo.hijoDerecho == null && nodo.hijoIzquierdo != null) {// Si
 																			// hijo
 																			// izquierdo
-			nodo = nodo.hijoIzquierdo;// Borra
+			nodo.hijoIzquierdo.padre = nodo.padre;
+			nodo.padre.hijoIzquierdo = nodo.hijoIzquierdo;// Borra
 
-		} else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo == null) {// Si
+			// Balanceo
+			boolean comp = true;
+			while (comp) {
+
+				Nodo<T> bal;
+				if (padreNodo == null) {
+					bal = null;
+				} else {
+					bal = necesitaBal(padreNodo);
+				}
+				if (bal != null) {
+					balanceo(bal, factor(bal), 0);
+					padreNodo = bal;
+				} else if (bal == null) {
+					comp = false;
+				}
+			}
+
+		}
+		// Caso solo hijo derecho existe
+		else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo == null) {// Si
 																			// hijo
 																			// derecho
-			nodo = nodo.hijoDerecho;// Borra
+			nodo.hijoDerecho.padre = nodo.padre;
+			nodo.padre.hijoDerecho = nodo.hijoDerecho;// Borra
 
-		} else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo != null) {// Si
+			// Blanaceo
+			boolean comp = true;
+			while (comp) {
+				Nodo<T> bal;
+				if (padreNodo == null) {
+					bal = null;
+				} else {
+					bal = necesitaBal(padreNodo);
+				}
+
+				if (bal != null) {
+					balanceo(bal, factor(bal), 0);
+					padreNodo = bal;
+				} else if (bal == null) {
+					comp = false;
+				}
+			}
+
+		}
+		// Caso ambos hijos existen
+		else if (nodo.hijoDerecho != null && nodo.hijoIzquierdo != null) {// Si
 																			// ambos
 																			// hijos
 			Nodo<T> camino = nodo.hijoDerecho;// Nodo auxiliar
@@ -433,11 +652,30 @@ public class AVLTree<T extends Comparable<T>> implements Conjunto<T> {
 				padre = camino;// Mueve el padre
 				camino = camino.hijoIzquierdo;// Mueve el auxiliar
 			} // Cuando estan en posicion
-			nodo.setDato(camino.dato);// Borra el dato a borrar por el mas
-										// izquierdo de sus hijos derechos
+			nodo.dato = camino.dato;// Borra el dato a borrar por el mas
+									// izquierdo de sus hijos derechos
 			padre.setHijoIzquierdo(camino.hijoDerecho);// Reasigna los hijos del
 														// auxiliar
 														// padre del auxiliar
+			padre.hijoIzquierdo.padre = padre;
+
+			// Balanceo
+			boolean comp = true;
+			while (comp) {
+				Nodo<T> bal;
+				if (padreNodo == null) {
+					bal = null;
+				} else {
+					bal = necesitaBal(padreNodo);
+				}
+
+				if (bal != null) {
+					balanceo(bal, factor(bal), 0);
+					padreNodo = bal;
+				} else if (bal == null) {
+					comp = false;
+				}
+			}
 		}
 
 	}
@@ -459,11 +697,11 @@ public class AVLTree<T extends Comparable<T>> implements Conjunto<T> {
 			nodo = raiz; // Lo asigna a nodo
 			return nodo; // Lo retorna
 		}
-		if (raiz.hijoIzquierdo != null) {// Va para la izquierda
-			localizaNodo(dato, raiz.hijoIzquierdo, nodo);
+		if (raiz.dato.compareTo(dato) > 0) {// Va para la izquierda
+			return localizaNodo(dato, raiz.hijoIzquierdo, nodo);
 		}
-		if (raiz.hijoDerecho != null) {// Luego derecha
-			localizaNodo(dato, raiz.hijoDerecho, nodo);
+		if (raiz.dato.compareTo(dato) < 0) {// Luego derecha
+			return localizaNodo(dato, raiz.hijoDerecho, nodo);
 		}
 		return nodo;// Retorna nodo
 	}
@@ -505,6 +743,22 @@ public class AVLTree<T extends Comparable<T>> implements Conjunto<T> {
 	@Override
 	public boolean isEmpty() {
 		return raiz == null;
+	}
+
+	/**
+	 * Retorna el tamaño del conjunto
+	 * 
+	 * @return el tamaño del conjunto
+	 */
+	@Override
+	public int size() {
+		Iterator<T> it = iterator();
+		int i = 0;
+		while (it.hasNext()) {
+			i++;
+			it.next();
+		}
+		return i;
 	}
 
 	/**

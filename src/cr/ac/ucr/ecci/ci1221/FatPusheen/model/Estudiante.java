@@ -3,69 +3,57 @@ package cr.ac.ucr.ecci.ci1221.FatPusheen.model;
 public class Estudiante implements EstudianteI {
 
 	/**
-	 * Atributos: index: sera la posicion en la lista de clase carne: un string
-	 * con su carne estudiantil cedula: su cedula, sin 0´s ni guiones edad: la
-	 * edad del estudiante
+	 * Atributos: 
+	 * index: sera la posicion en la lista de clase 
+	 * Nombre: el nombre del estudiante
 	 */
 	int index;
-	String carne;
-	int cedula;
-	int edad;
+	String Nombre;
 
-	public Estudiante(String carne, int cedula, int edad, int index) {
-		this.carne = carne;
-		this.cedula = cedula;
-		this.edad = edad;
+	/**
+	 * Constructor de Estudiante
+	 * 
+	 * @param Nombre
+	 *            el nombre del estudiante
+	 * @param index
+	 *            la posicion en la lista del clase del estudiante
+	 */
+	public Estudiante(String Nombre, int index) {
+		this.Nombre = Nombre;
 		this.index = index;
 	}
 
+	/**
+	 * Get de index
+	 */
 	@Override
 	public int getIndex() {
 		return this.index;
 	}
 
+	/**
+	 * Set de index
+	 */
 	public void setIndex(int index) {
 		this.index = index;
 	}
 
-	public int getEdad() {
-		return this.edad;
-	}
-
-	public void setEdad(int edad) {
-		this.edad = edad;
-	}
-
-	public String getCarne() {
-		return this.carne;
-	}
-
-	public void setCarne(String carne) {
-		this.carne = carne;
-	}
-
-	public int getCedula() {
-		return this.cedula;
-	}
-
-	public void setCedula(int cedula) {
-		this.cedula = cedula;
-	}
-
+	/**
+	 * Hash code de estudiante, denotado por su index
+	 */
 	@Override
 	public int hashCode() {
-		int resultado;
-		/*int carnet = carne.charAt(0) + Integer.parseInt(carne.substring(1));
-		resultado = cedula + edad + carnet;
-		resultado = (resultado) % 100 ;*/
-		resultado = index;
-		return resultado;
+		return index;
 	}
 
+	/**
+	 * CompareTo de Estudiante, retorna -1 si this es mayor a comparacion 0 si
+	 * son iguales y 1 si comparacion es mayor a this
+	 */
 	@Override
 	public int compareTo(Object comparacion) {
-		int primero = Integer.parseInt(this.carne.substring(1));
-		int segundo = Integer.parseInt(((Estudiante) comparacion).carne.substring(1));
+		int primero = this.index;
+		int segundo = ((Estudiante) comparacion).index;
 		int res = 0;
 		if (primero < segundo) {
 			res = -1;
@@ -75,6 +63,22 @@ public class Estudiante implements EstudianteI {
 			res = 1;
 		}
 		return res;
+	}
+
+	/**
+	 * Get de nombre
+	 */
+	@Override
+	public String getNombre() {
+		return this.Nombre;
+	}
+
+	/**
+	 * Set de nombre
+	 */
+	@Override
+	public void setNombre(String Nombre) {
+		this.Nombre = Nombre;
 	}
 
 }

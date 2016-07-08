@@ -47,7 +47,7 @@ public class BinarySearchTree<T extends Comparable> implements Conjunto<T> {
 
 		Iterator<T> itA = A.iterator();// Iterador de A
 		Conjunto<T> resultado = new BinarySearchTree<T>(itA.next());// Nuevo
-																					// arbol
+																	// arbol
 
 		while (itA.hasNext()) {// Añade todo A al nuevo arbol
 			resultado.add(itA.next());
@@ -89,7 +89,7 @@ public class BinarySearchTree<T extends Comparable> implements Conjunto<T> {
 		}
 		Iterator<T> itA = A.iterator();// Iterador A
 		Conjunto<T> resultado = new BinarySearchTree<T>(itA.next());// Nuevo
-																					// arbol
+																	// arbol
 
 		while (itA.hasNext()) {// Iteramos por todo A
 			resultado.add(itA.next());// Insertamos en resultado
@@ -129,7 +129,7 @@ public class BinarySearchTree<T extends Comparable> implements Conjunto<T> {
 		}
 		Iterator<T> itA = A.iterator();// Iterador de A
 		Conjunto<T> resultado = new BinarySearchTree<T>(itA.next());// Nuevo
-																					// arbol
+																	// arbol
 
 		while (itA.hasNext()) {// Iteramos todo A
 			resultado.add(itA.next());// Insertamos en resultado lo de A
@@ -167,13 +167,17 @@ public class BinarySearchTree<T extends Comparable> implements Conjunto<T> {
 	 * @return un boolean si el dato esta o no en la lista
 	 */
 	private boolean contains(Nodo<T> nodo, T dato) {
+		if (nodo == null) {
+			return false;
+		}
+
 		if (nodo.dato.equals(dato)) {// Si lo encontro
 			return true;// Retorna true
 		} else {
-			if (nodo.hijoIzquierdo != null) {// Si tiene hijo izquierdo
+			if (nodo.dato.compareTo(dato) > 0) {// Si nodo es mayor que dato
 				return contains(nodo.hijoIzquierdo, dato);// Recursividad por
 															// ahi
-			} else if (nodo.hijoDerecho != null) {// Si tiene hijo derecho
+			} else if (nodo.dato.compareTo(dato) < 0) {// Si nodo es menor
 				return contains(nodo.hijoDerecho, dato);// Recursividad por ahi
 			}
 		}
@@ -316,11 +320,11 @@ public class BinarySearchTree<T extends Comparable> implements Conjunto<T> {
 			nodo = raiz; // Lo asigna a nodo
 			return nodo; // Lo retorna
 		}
-		if (raiz.hijoIzquierdo != null) {// Va para la izquierda
-			localizaNodo(dato, raiz.hijoIzquierdo, nodo);
+		if (raiz.dato.compareTo(dato) > 0) {// Va para la izquierda
+			return localizaNodo(dato, raiz.hijoIzquierdo, nodo);
 		}
-		if (raiz.hijoDerecho != null) {// Luego derecha
-			localizaNodo(dato, raiz.hijoDerecho, nodo);
+		if (raiz.dato.compareTo(dato) < 0) {// Luego derecha
+			return localizaNodo(dato, raiz.hijoDerecho, nodo);
 		}
 		return nodo;// Retorna nodo
 	}
@@ -362,6 +366,22 @@ public class BinarySearchTree<T extends Comparable> implements Conjunto<T> {
 	@Override
 	public boolean isEmpty() {
 		return raiz == null;
+	}
+	
+	/**
+	 * Retorna el tamaño del conjunto
+	 * 
+	 * @return el tamaño del conjunto
+	 */
+	@Override
+	public int size(){
+		Iterator<T> it = iterator();
+		int i = 0;
+		while (it.hasNext()){
+			i++;
+			it.next();
+		}
+		return i;
 	}
 
 	/**

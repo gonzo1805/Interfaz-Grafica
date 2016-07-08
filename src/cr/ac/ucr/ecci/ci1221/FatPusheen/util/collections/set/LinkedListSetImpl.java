@@ -232,5 +232,15 @@ public class LinkedListSetImpl<T> implements Conjunto<T> {
 		Iterator<T> it = this.lista.iterator();
 		return it;
 	}
+	
+	/**
+	 * Retorna el tamaño del conjunto
+	 * 
+	 * @return el tamaño del conjunto
+	 */
+	@Override
+	public int size(){
+		return this.lista.size();
+	}
 
 }

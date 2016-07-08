@@ -14,6 +14,8 @@ public class MainArbol {
 		arbol.add(2);
 		arbol.add(6);
 		arbol.add(7);
+		arbol.remove(5);
+		arbol.remove(2);
 		
 	}
 }
